@@ -1,24 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import {  Routes, Route , useLocation } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Movies from './pages/Movies';
+import MovieDetails from './pages/MovieDetails';
+import MyBookings from './pages/MyBookings';
+import Favourite from './pages/Favourite';
+import {Toaster } from 'react-hot-toast'
+import Footer from './components/Footer';
 
 function App() {
+   
+   const isAdminRoute = useLocation().pathname.startsWith('/admin');
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      { !isAdminRoute && <Navbar/>}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/movies/:id" element={<MovieDetails />} />
+        <Route path="/movies/:id/:date" element={<MovieDetails />} />
+        <Route path='/my-bookings' element={<MyBookings/>}/>
+        <Route path="/favorite" element={< Favourite/>} />
+      </Routes>
+            { !isAdminRoute && <Footer/>}
+
+    </>
   );
 }
 
