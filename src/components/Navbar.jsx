@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, {  useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { MenuIcon, SearchIcon, TicketPlus, XIcon } from 'lucide-react';
@@ -21,7 +21,7 @@ const Navbar = () => {
 
       {/* Menu Items */}
       <div
-        className={`${menuOpen ? 'flex' : 'hidden'} max-md:fixed max-md:inset-0 z-40 bg-white/10 backdrop-blur flex-col justify-center items-center max-md:gap-10 md:flex md:flex-row md:static md:bg-transparent md:backdrop-blur-none md:gap-10 md:rounded-full py-3 px-6 md:px-10 border md:border-gray-300/20 transition duration-300`}
+        className={`${menuOpen ? 'max-md:w-full flex' : "max-md-w-0 hidden" } max-md:fixed max-md:inset-0 z-40 bg-white/10 backdrop-blur flex-col justify-center items-center max-md:gap-10 md:flex md:flex-row md:static md:bg-transparent md:backdrop-blur-none md:gap-10 md:rounded-full py-3 px-6 md:px-10 border md:border-gray-300/20 transition duration-300`}
       >
         <XIcon
           className='md:hidden absolute top-6 right-6 w-6 h-6 text-white cursor-pointer'
