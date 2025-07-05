@@ -36,7 +36,7 @@ const Movies = () =>  {
             tiltMaxAngleX={10}
             tiltMaxAngleY={10}
             scale={1.03}
-            transitionSpeed={400}
+            transitionSpeed={1000}
             className="rounded-xl shadow-xl hover:shadow-red-500/20 duration-300"
           ><MovieCard movie={show} />
           </Tilt>

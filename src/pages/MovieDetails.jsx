@@ -4,6 +4,8 @@ import { dummyShowsData, dummyDateTimeData } from '../assets/assets';
 import BlurCircle from '../components/BlurCircle';
 import timeFormat from '../lib/timeFormat';
 import ReactPlayer from 'react-player';
+import { Heart } from 'lucide-react';
+import DateSelect from '../components/DateSelect';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -43,24 +45,24 @@ const MovieDetails = () => {
       <BlurCircle top="100px" left="60%" size="160px" color="rgba(255, 255, 255, 0.08)" />
 
       {/* Hero Section */}
-      <div className="flex flex-col md:flex-row items-center gap-10 max-w-5xl mx-auto relative z-10">
+      <div className="flex flex-col md:flex-row items-center gap-10 max-w-5xl mx-auto relative z-10 pt-14">
         <img
           src={movie.poster_path}
           alt={movie.title}
-          className="rounded-xl shadow-lg transition-transform duration-500 h-[21rem] w-auto object-cover border-[2px] border-gray-700"
+          className="rounded-xl shadow-lg transition-transform duration-500 h-[14rem] w-auto   "
         />
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col">
           <p className="text-sm text-red-500 uppercase tracking-wide">Language: {movie.original_language}</p>
           <h1 className="text-4xl font-bold text-white leading-snug">{movie.title}</h1>
-          <p className="text-gray-400 italic text-md">{movie.tagline}</p>
+          <p className="text-gray-400 italic text-md ">{movie.tagline}</p>
           <div className="flex items-center gap-4 mt-2 text-sm">
             <span className="text-red-400 font-semibold text-lg">{movie.vote_average.toFixed(1)}</span>
             <span className="text-gray-400">● {movie.vote_count.toLocaleString()} votes</span>
           </div>
-          <div className="mt-6 flex gap-4 flex-wrap">
+          <div className=" flex gap-4 mt-4 flex-wrap">
             <button
               onClick={() => setPlayTrailer(true)}
-              className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-md text-sm text-white font-medium transition"
+              className="px-5 py-2 bg-indigo-500 hover:bg-indigo-400 rounded-md text-sm text-white font-medium transition"
             >
               Watch Trailer
             </button>
@@ -68,16 +70,25 @@ const MovieDetails = () => {
               href="https://in.bookmyshow.com"
               target="_blank"
               rel="noreferrer"
-              className="px-5 py-2 bg-red-600 hover:bg-red-500 rounded-md text-sm text-white font-medium transition"
+              className="px-5 py-2 bg-red-500 hover:bg-red-400 rounded-md text-sm text-white font-medium transition"
             >
               Book Now
             </a>
+            
+             <button 
+            className='bg-gray-700 p-2.5 rounded-full transition cursor-pointer active:scale-95 '>
+              <Heart className={'w-5 h-5'} />
+          </button>
           </div>
-        </div>
+          
+         
+          
+      </div>
+          
       </div>
 
       {/* Metadata */}
-      <div className="mt-12 max-w-3xl mx-auto text-sm text-gray-400 space-y-3 relative z-10">
+      <div className="mt-2 ml-10 mx-auto text-sm text-gray-400 space-y-3 relative z-10">
         <p>
           <span className="font-semibold text-white">Release:</span>{' '}
           {new Date(movie.release_date).toLocaleDateString()}
@@ -132,6 +143,10 @@ const MovieDetails = () => {
           </div>
         </div>
       )}
+
+      {/* Date Select Section */}
+      <DateSelect dateTime={show.dateTime} id={id} />
+
     </div>
   );
 };
