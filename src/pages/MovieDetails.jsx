@@ -6,9 +6,19 @@ import timeFormat from '../lib/timeFormat';
 import ReactPlayer from 'react-player';
 import { Heart } from 'lucide-react';
 import DateSelect from '../components/DateSelect';
+import MovieCard from '../components/MovieCard';
+import Tilt from 'react-parallax-tilt';
+import { ArrowRight } from 'lucide-react';
+import { scrollTo } from '../utils/scrollTo';
+import { useNavigate } from 'react-router-dom';
+import MovieDetailsSkeleton from '../components/MovieDetailsSkeleton';
+
+
+
 
 const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [show, setShow] = useState(null);
   const [error, setError] = useState(null);
   const [playTrailer, setPlayTrailer] = useState(false);
@@ -18,6 +28,14 @@ const MovieDetails = () => {
     if (!match) return setError('Movie not found.');
     setShow({ movie: match, dateTime: dummyDateTimeData });
   }, [id]);
+
+  const scrollToDateSelect = () => {
+  const section = document.getElementById('dateSelect');
+  if (section) {
+    const offset = section.getBoundingClientRect().top + window.scrollY - 100; // scroll 100px above
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+  }
+  };
 
   if (error) {
     return (
@@ -37,7 +55,10 @@ const MovieDetails = () => {
 
   const { movie } = show;
 
-  return (
+  if (!show?.movie && !error) {
+  return <MovieDetailsSkeleton />;
+  }
+   else return(
     <div className="relative px-6 md:px-12 lg:px-32 xl:px-52 pt-20 pb-24 bg-gradient-to-b from-[#0d0d0d] via-black to-[#1a1a1a] text-gray-300 overflow-hidden">
       {/* Decorative Blur Backgrounds */}
       <BlurCircle top="-80px" left="-60px" size="220px" color="rgba(255, 0, 0, 0.15)" />
@@ -49,42 +70,34 @@ const MovieDetails = () => {
         <img
           src={movie.poster_path}
           alt={movie.title}
-          className="rounded-xl shadow-lg transition-transform duration-500 h-[14rem] w-auto   "
+          className="rounded-xl shadow-lg transition-transform duration-500 h-[14rem] w-auto"
         />
         <div className="flex flex-col">
           <p className="text-sm text-red-500 uppercase tracking-wide">Language: {movie.original_language}</p>
           <h1 className="text-4xl font-bold text-white leading-snug">{movie.title}</h1>
-          <p className="text-gray-400 italic text-md ">{movie.tagline}</p>
+          <p className="text-gray-400 italic text-md">{movie.tagline}</p>
           <div className="flex items-center gap-4 mt-2 text-sm">
             <span className="text-red-400 font-semibold text-lg">{movie.vote_average.toFixed(1)}</span>
             <span className="text-gray-400">● {movie.vote_count.toLocaleString()} votes</span>
           </div>
-          <div className=" flex gap-4 mt-4 flex-wrap">
+          <div className="flex gap-4 mt-4 flex-wrap">
             <button
               onClick={() => setPlayTrailer(true)}
               className="px-5 py-2 bg-indigo-500 hover:bg-indigo-400 rounded-md text-sm text-white font-medium transition"
             >
               Watch Trailer
             </button>
-            <a
-              href="https://in.bookmyshow.com"
-              target="_blank"
-              rel="noreferrer"
+            <button
+              onClick={scrollToDateSelect}
               className="px-5 py-2 bg-red-500 hover:bg-red-400 rounded-md text-sm text-white font-medium transition"
             >
-              Book Now
-            </a>
-            
-             <button 
-            className='bg-gray-700 p-2.5 rounded-full transition cursor-pointer active:scale-95 '>
-              <Heart className={'w-5 h-5'} />
-          </button>
+              Buy Now
+            </button>
+            <button className="bg-gray-700 p-2.5 rounded-full transition cursor-pointer active:scale-95">
+              <Heart className="w-5 h-5" />
+            </button>
           </div>
-          
-         
-          
-      </div>
-          
+        </div>
       </div>
 
       {/* Metadata */}
@@ -146,9 +159,62 @@ const MovieDetails = () => {
 
       {/* Date Select Section */}
       <DateSelect dateTime={show.dateTime} id={id} />
+      
+      {/* Recommended Movies Section */}
+{dummyShowsData.length > 0 && (
+  <div className="mt-32 relative z-10 px-6 md:px-16 lg:px-24 xl:px-44">
+    <BlurCircle top="0" right="-100px" />
+    <BlurCircle top="300px" left="-80px" />
+    <div className="flex items-center justify-between pb-10">
+      <p className="text-gray-200 font-semibold text-xl tracking-wide pl-2">Recommended Movies</p>
+      <button
+        onClick={() => {
+          navigate('/movies');
+          scrollTo(0, 0);
+        }}
+        className="group flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-all duration-50 cursor-pointer"
+      >
+        View All
+        <ArrowRight className="group-hover:translate-x-1 transition-transform w-4.5 h-4.5" />
+      </button>
+    </div>
+
+    <div className="flex flex-wrap justify-center gap-6">
+      {dummyShowsData.slice(1, 5).map((movie) => (
+        <Tilt
+          key={movie._id}
+          glareEnable={true}
+          glareMaxOpacity={0.1}
+          glareColor="#ffffff"
+          tiltMaxAngleX={2}
+          tiltMaxAngleY={2}
+          scale={1.01}
+          transitionSpeed={2000}
+          className="rounded-xl shadow-xl hover:shadow-red-500/20 duration-300"
+        >
+          <MovieCard movie={movie} />
+        </Tilt>
+      ))}
+    </div>
+
+    <div className="flex justify-center mt-14">
+      <button
+        onClick={() => {
+          navigate('/movies');
+          scrollTo(0, 0);
+        }}
+        className="px-10 py-3 text-sm bg-red-500 hover:bg-red-600 transition-all rounded-md shadow-md hover:shadow-red-400/40 font-medium cursor-pointer"
+      >
+        Show More
+      </button>
+    </div>
+  </div>
+)}
+
 
     </div>
   );
+
 };
 
 export default MovieDetails;
